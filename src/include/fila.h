@@ -14,6 +14,7 @@ typedef struct NoFila {
 typedef struct Fila{
     NoFila* inicio;
     NoFila* fim;
+    int quantidade;
 } Fila;
 
 Fila* criarFila();
