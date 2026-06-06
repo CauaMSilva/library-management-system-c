@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include "include/arvore.h"
 
+NoArvore* inserirNo(NoArvore* raiz, Livro* livro);
+Livro* buscarNo(NoArvore* raiz, int codigo);
+void emOrdem(NoArvore* raiz);
+void preOrdem(NoArvore* raiz);
+void posOrdem(NoArvore* raiz);
+int contarNos(NoArvore* raiz);
+int calcularAltura(NoArvore* raiz);
+
 Arvore* criarArvore() {
     Arvore* arvore = (Arvore*) malloc(sizeof(Arvore));
 
