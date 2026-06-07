@@ -64,22 +64,17 @@ Projeto/
 │
 ├── README.md
 │
-├── data/
-│   └── Arquivos de armazenamento da biblioteca
-│
 └── src/
     ├── include/
-    │   ├── biblioteca.h
-    │   ├── livro.h
+    │   ├── arvore.h
     │   ├── fila.h
     │   ├── lista.h
-    │   └── arvore.h
+    │   └── livro.h
     │
-    ├── biblioteca.c
-    ├── livro.c
+    ├── arvore.c
     ├── fila.c
     ├── lista.c
-    ├── arvore.c
+    ├── livro.c
     └── main.c
 ```
 

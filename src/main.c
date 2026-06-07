@@ -121,11 +121,11 @@ void menuLivro(Arvore* arvore, Fila* fila, Lista* lista)
                 listarLivrosEmOrdem(arvore);
                 break;
             case 4:
-                printf("\n--- Livros em Pré-Ordem");
+                printf("\n--- Livros em Pré-Ordem ---\n");
                 listarLivrosPreOrdem(arvore);
                 break;
             case 5:
-                printf("\n--- Livros em Pós-Ordem ---");
+                printf("\n--- Livros em Pós-Ordem ---\n");
                 listarLivrosPosOrdem(arvore);
                 break;
             case 6:
@@ -133,8 +133,6 @@ void menuLivro(Arvore* arvore, Fila* fila, Lista* lista)
                 break;
             case 7:
                 telaDevolverLivro(arvore, fila, lista);
-                break;
-            case -1:
                 break;
             case 0:
                 break;
@@ -185,100 +183,113 @@ void telaCadastrarLivro(Arvore* arvore) {
 }
 
 void telaBuscaLivro(Arvore* arvore) {
-    int codigo;
-    printf("\nDigire o código do livro para busca: ");
-    scanf("%d", &codigo);
-    limparBuffer();
-
-    Livro* livro = buscarLivroArvore(arvore, codigo);
-    if (livro != NULL) {
-        printf("\n--- Livro Encontrado ---\n");
-        exibirLivro(livro);
+    if (arvore -> raiz == NULL) {
+        printf("Nenhum livro cadastrado.\n");
     } else {
-        printf("Erro: Livro com código %d não foi encontrado. \n", codigo);
+        int codigo;
+
+        printf("\nDigite o código do livro para busca: ");
+        scanf("%d", &codigo);
+        limparBuffer();
+    
+        Livro* livro = buscarLivroArvore(arvore, codigo);
+        if (livro != NULL) {
+            printf("\n--- Livro Encontrado ---\n");
+            exibirLivro(livro);
+        } else {
+            printf("Erro: Livro com código %d não foi encontrado.\n", codigo);
+        }
     }
 }
 
 void telaRealizarEmprestimo(Arvore* arvore, Fila* fila, Lista* lista) {
-    int codigo;
-    char nomeUsuario[100];
-
-    printf("\n--- Realizar Empréstimo ---\n");
-    printf("Nome do usuário: ");
-    limparBuffer();
-    fgets(nomeUsuario, sizeof(nomeUsuario), stdin);
-    nomeUsuario[strcspn(nomeUsuario, "\n")] = '\0';
-
-    printf("Código do livro: ");
-    scanf("%d",&codigo);
-    limparBuffer();
-
-    Livro* livro = buscarLivroArvore(arvore, codigo);
-    if (livro == NULL) {
-        printf("Erro: Livro inexistente no acervo. \n");
-        return;
-    }
-
-    if (obterQuantidadeDisponivel(livro) > 0) {
-        emprestarExemplar(livro);
-
-        Emprestimo emp;
-        strcpy(emp.nomeUsuario, nomeUsuario);
-        emp.codigoLivro = codigo;
-        strcpy(emp.tituloLivro, livro -> titulo);
-
-        inserirEmprestimo(lista, emp);
-        printf("Empréstimo realizado com sucesso para %s!\n", nomeUsuario);
+    if (arvore -> raiz == NULL) {
+        printf("Nenhum livro cadastrado.\n");
     } else {
-        char opcaoReserva;
-        printf("Não há exemplares disponíveis. Deseja entrar na fila de reserva? (S/N): ");
-        scanf("%c", &opcaoReserva);
+        int codigo;
+        char nomeUsuario[100];
+    
+        printf("\n--- Realizar Empréstimo ---\n");
+        printf("Nome do usuário: ");
         limparBuffer();
-
-        if (opcaoReserva == 'S' || opcaoReserva == 's') {
-            Reserva res;
-            strcpy(res.nomeUsuario, nomeUsuario);
-            res.codigoLivro = codigo;
-            enfileirarReserva(fila, res);
-            printf("Usuário adicionado à fila de reservas com sucesso.\n");
+        fgets(nomeUsuario, sizeof(nomeUsuario), stdin);
+        nomeUsuario[strcspn(nomeUsuario, "\n")] = '\0';
+    
+        printf("Código do livro: ");
+        scanf("%d",&codigo);
+        limparBuffer();
+    
+        Livro* livro = buscarLivroArvore(arvore, codigo);
+        if (livro == NULL) {
+            printf("Erro: Livro inexistente no acervo. \n");
+            return;
+        }
+    
+        if (obterQuantidadeDisponivel(livro) > 0) {
+            emprestarExemplar(livro);
+    
+            Emprestimo emp;
+            strcpy(emp.nomeUsuario, nomeUsuario);
+            emp.codigoLivro = codigo;
+            strcpy(emp.tituloLivro, livro -> titulo);
+    
+            inserirEmprestimo(lista, emp);
+            printf("Empréstimo realizado com sucesso para %s!\n", nomeUsuario);
+        } else {
+            char opcaoReserva;
+            printf("Não há exemplares disponíveis. Deseja entrar na fila de reserva? (S/N): ");
+            scanf("%c", &opcaoReserva);
+            limparBuffer();
+    
+            if (opcaoReserva == 'S' || opcaoReserva == 's') {
+                Reserva res;
+                strcpy(res.nomeUsuario, nomeUsuario);
+                res.codigoLivro = codigo;
+                enfileirarReserva(fila, res);
+                printf("Usuário adicionado à fila de reservas com sucesso.\n");
+            }
         }
     }
 }
 
 void telaDevolverLivro(Arvore* arvore, Fila* fila, Lista* lista) {
-    int codigo;
-    printf("\nDigite o código do livro para devolução: ");
-    scanf("%d", &codigo);
-    limparBuffer();
-
-    Livro* livro = buscarLivroArvore(arvore, codigo);
-    if (livro == NULL) {
-        printf("Erro: Livro não pertence ao acervo desta biblioteca.\n");
-        return;
-    }
+    if (arvore -> raiz == NULL) {
+        printf("Nenhum livro cadastrado.\n");
+    } else {
+        int codigo;
+        printf("\nDigite o código do livro para devolução: ");
+        scanf("%d", &codigo);
+        limparBuffer();
     
-    devolverExemplar(livro);
-    printf("Exemplar devolvido ao acervo. Quantidade atualizada.\n");
+        Livro* livro = buscarLivroArvore(arvore, codigo);
+        if (livro == NULL) {
+            printf("Erro: Livro não pertence ao acervo desta biblioteca.\n");
+            return;
+        }
+        
+        devolverExemplar(livro);
+        printf("Exemplar devolvido ao acervo. Quantidade atualizada.\n");
+        
+        int qtdOriginal = fila -> quantidade;
+        int atendeu = 0;
     
-    int qtdOriginal = fila -> quantidade;
-    int atendeu = 0;
-
-    for (int i = 0; i < qtdOriginal; i++) {
-        Reserva reservaRemovida = desenfileirarReserva(fila);
-
-        if (reservaRemovida.codigoLivro == livro -> codigo && atendeu == 0) {       
-
-            emprestarExemplar(livro);
-            Emprestimo emp;
-            strcpy(emp.nomeUsuario, reservaRemovida.nomeUsuario);
-            emp.codigoLivro = reservaRemovida.codigoLivro;
-            strcpy(emp.tituloLivro, livro -> titulo);
-            inserirEmprestimo(lista, emp);
-
-            printf("O usuário %s saiu da fila de espera com o livro %s", reservaRemovida.nomeUsuario, livro->titulo);
-            atendeu = 1;
-        } else {
-            enfileirarReserva(fila, reservaRemovida);
+        for (int i = 0; i < qtdOriginal; i++) {
+            Reserva reservaRemovida = desenfileirarReserva(fila);
+    
+            if (reservaRemovida.codigoLivro == livro -> codigo && atendeu == 0) {       
+    
+                emprestarExemplar(livro);
+                Emprestimo emp;
+                strcpy(emp.nomeUsuario, reservaRemovida.nomeUsuario);
+                emp.codigoLivro = reservaRemovida.codigoLivro;
+                strcpy(emp.tituloLivro, livro -> titulo);
+                inserirEmprestimo(lista, emp);
+    
+                printf("O usuário %s saiu da fila de espera com o livro %s", reservaRemovida.nomeUsuario, livro->titulo);
+                atendeu = 1;
+            } else {
+                enfileirarReserva(fila, reservaRemovida);
+            }
         }
     }
 }

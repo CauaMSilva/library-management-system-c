@@ -13,8 +13,11 @@ Lista* criarLista() {
 }
 
 int listaVazia(Lista* lista) {
-    if (lista == NULL) return 1;
-    return (lista->inicio == NULL);
+    if (lista -> inicio == NULL) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 void inserirEmprestimo(Lista* lista, Emprestimo emprestimo) {
@@ -32,7 +35,7 @@ void inserirEmprestimo(Lista* lista, Emprestimo emprestimo) {
 }
 
 void listarEmprestimos(Lista* lista) {
-    if (listaVazia(lista)) {
+    if (listaVazia(lista) == 1) {
         printf("Nenhum emprestimo registrado no historico.\n");
         return;
     }

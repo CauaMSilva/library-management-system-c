@@ -11,7 +11,13 @@ int filaVazia(Fila* fila) {
 }
 
 void exibirReservas(Fila* fila) {
+    if (filaVazia(fila) == 1) {
+        printf("Nenhum usuário na fila de espera.\n");
+        return;
+    }
+
     NoFila *aux = fila -> inicio;
+
     while (aux != NULL)
     {
         printf("O usuário %s: %d\n", aux -> reserva.nomeUsuario, aux -> reserva.codigoLivro);
@@ -47,8 +53,11 @@ void enfileirarReserva(Fila* fila, Reserva reserva) {
 
 Reserva desenfileirarReserva(Fila* fila) {
     Reserva reservaRemovida;
-    if (filaVazia(fila) == 0) {
-        NoFila *aux = fila -> inicio;        
+    if (filaVazia(fila) == 1) {
+        printf("Nenhum usuário na fila de espera.\n");
+        reservaRemovida.codigoLivro = -1;
+    } else {
+        NoFila *aux = fila -> inicio;
         reservaRemovida = aux -> reserva;
 
         fila -> inicio = fila -> inicio -> proximo;
@@ -59,10 +68,6 @@ Reserva desenfileirarReserva(Fila* fila) {
         free(aux);
         aux = NULL;
         fila -> quantidade--;
-        return reservaRemovida;
-    } else {
-        printf("Lista vazia!\n");
-        reservaRemovida.codigoLivro = -1;
-        return reservaRemovida;
     }
+    return reservaRemovida;
 }

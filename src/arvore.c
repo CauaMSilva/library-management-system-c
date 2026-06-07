@@ -68,6 +68,10 @@ Livro* buscarLivroArvore(Arvore* arvore, int codigo) {
         return NULL;
     }
 
+    if (arvore -> raiz == NULL) {
+        return NULL;
+    }
+
     return buscarNo(arvore->raiz, codigo);
 }
 
@@ -91,6 +95,12 @@ Livro* buscarNo(NoArvore* raiz, int codigo) {
 void listarLivrosEmOrdem(Arvore* arvore) {
 
     if (arvore == NULL) {
+        printf("Nenhum livro registrado.\n");
+        return;
+    }
+
+    if (arvore -> raiz == NULL) {
+        printf("Nenhum livro registrado.\n");
         return;
     }
 
@@ -118,6 +128,12 @@ void emOrdem(NoArvore* raiz) {
 void listarLivrosPreOrdem(Arvore* arvore) {
 
     if (arvore == NULL) {
+        printf("Nenhum livro registrado.\n");
+        return;
+    }
+
+    if (arvore -> raiz == NULL) {
+        printf("Nenhum livro registrado.\n");
         return;
     }
 
@@ -140,6 +156,12 @@ void preOrdem(NoArvore* raiz) {
 void listarLivrosPosOrdem(Arvore* arvore) {
 
     if (arvore == NULL) {
+        printf("Nenhum livro registrado.\n");
+        return;
+    }
+
+    if (arvore -> raiz == NULL) {
+        printf("Nenhum livro registrado.\n");
         return;
     }
 
@@ -165,6 +187,10 @@ int contarLivros(Arvore* arvore) {
         return 0;
     }
 
+    if (arvore -> raiz == NULL) {
+        return 0;
+    }
+
     return contarNos(arvore->raiz);
 }
 
@@ -181,6 +207,10 @@ int contarNos(NoArvore* raiz) {
 int calcularAlturaArvore(Arvore* arvore) {
 
     if (arvore == NULL) {
+        return -1;
+    }
+
+    if (arvore -> raiz == NULL) {
         return -1;
     }
 
