@@ -153,7 +153,10 @@ void telaCadastrarLivro(Arvore* arvore) {
 
     printf("\n--- Cadastro de Novo Livro ---\n");
     printf("Código: ");
-    scanf("%d", &codigo);
+    while (scanf("%d", &codigo) != 1) {
+        printf("Entrada inválida! Por favor, digite apenas números\n: ");
+        limparBuffer();
+    }
     limparBuffer();
 
     if (buscarLivroArvore(arvore, codigo) != NULL) {
@@ -170,9 +173,17 @@ void telaCadastrarLivro(Arvore* arvore) {
     autor[strcspn(autor, "\n")] = '\0';
 
     printf("Ano de Publicação: ");
-    scanf("%d", &ano);
+    while (scanf("%d", &ano) != 1) {
+        printf("Entrada inválida! Por favor, digite apenas números\n: ");
+        limparBuffer();
+    }
+    limparBuffer();
+
     printf("Quantidade Total de Exemplares: ");
-    scanf("%d", &qtd);
+    while (scanf("%d", &qtd) != 1) {
+        printf("Entrada inválida! Por favor, digite apenas números\n: ");
+        limparBuffer();
+    }
     limparBuffer();
 
     Livro* novo = criarLivro(codigo, titulo, autor, ano, qtd);
@@ -189,7 +200,10 @@ void telaBuscaLivro(Arvore* arvore) {
         int codigo;
 
         printf("\nDigite o código do livro para busca: ");
-        scanf("%d", &codigo);
+        while (scanf("%d", &codigo) != 1) {
+            printf("Entrada inválida! Por favor, digite apenas números\n: ");
+            limparBuffer();
+        }
         limparBuffer();
     
         Livro* livro = buscarLivroArvore(arvore, codigo);
@@ -216,7 +230,10 @@ void telaRealizarEmprestimo(Arvore* arvore, Fila* fila, Lista* lista) {
         nomeUsuario[strcspn(nomeUsuario, "\n")] = '\0';
     
         printf("Código do livro: ");
-        scanf("%d",&codigo);
+        while (scanf("%d",&codigo) != 1) {
+            printf("Entrada inválida! Por favor, digite apenas números\n: ");
+            limparBuffer();
+        }
         limparBuffer();
     
         Livro* livro = buscarLivroArvore(arvore, codigo);
@@ -257,8 +274,19 @@ void telaDevolverLivro(Arvore* arvore, Fila* fila, Lista* lista) {
         printf("Nenhum livro cadastrado.\n");
     } else {
         int codigo;
-        printf("\nDigite o código do livro para devolução: ");
-        scanf("%d", &codigo);
+        char nomeUsuario[100];
+
+        printf("\n--- Devolução de Livro ---\n");
+        printf("Nome do usuário que está devolvendo: ");
+        limparBuffer();
+        fgets(nomeUsuario, sizeof(nomeUsuario), stdin);
+        nomeUsuario[strcspn(nomeUsuario, "\n")] = '\0';
+    
+        printf("Digite o código do livro para devolução: ");
+        while (scanf("%d", &codigo) != 1) {
+            printf("Entrada inválida! Por favor, digite apenas números\n: ");
+            limparBuffer();
+        }
         limparBuffer();
     
         Livro* livro = buscarLivroArvore(arvore, codigo);
@@ -267,9 +295,17 @@ void telaDevolverLivro(Arvore* arvore, Fila* fila, Lista* lista) {
             return;
         }
         
+        // 1. Cria uma estrutura temporária com os dados coletados e remove da lista
+        Emprestimo empDevolucao;
+        strcpy(empDevolucao.nomeUsuario, nomeUsuario);
+        empDevolucao.codigoLivro = codigo;
+        removerEmprestimo(lista, empDevolucao);
+
+        // 2. Devolve o exemplar ao acervo (aumenta o estoque disponível)
         devolverExemplar(livro);
         printf("Exemplar devolvido ao acervo. Quantidade atualizada.\n");
         
+        // 3. Processa o "Giro de Fila" para o próximo da reserva (o seu código atual)
         int qtdOriginal = fila -> quantidade;
         int atendeu = 0;
     
@@ -277,15 +313,14 @@ void telaDevolverLivro(Arvore* arvore, Fila* fila, Lista* lista) {
             Reserva reservaRemovida = desenfileirarReserva(fila);
     
             if (reservaRemovida.codigoLivro == livro -> codigo && atendeu == 0) {       
-    
                 emprestarExemplar(livro);
-                Emprestimo emp;
-                strcpy(emp.nomeUsuario, reservaRemovida.nomeUsuario);
-                emp.codigoLivro = reservaRemovida.codigoLivro;
-                strcpy(emp.tituloLivro, livro -> titulo);
-                inserirEmprestimo(lista, emp);
+                Emprestimo empNovo;
+                strcpy(empNovo.nomeUsuario, reservaRemovida.nomeUsuario);
+                empNovo.codigoLivro = reservaRemovida.codigoLivro;
+                strcpy(empNovo.tituloLivro, livro -> titulo);
+                inserirEmprestimo(lista, empNovo);
     
-                printf("O usuário %s saiu da fila de espera com o livro %s", reservaRemovida.nomeUsuario, livro->titulo);
+                printf("O usuário %s saiu da fila de espera com o livro %s\n", reservaRemovida.nomeUsuario, livro->titulo);
                 atendeu = 1;
             } else {
                 enfileirarReserva(fila, reservaRemovida);
